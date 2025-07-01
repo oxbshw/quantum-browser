@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  quantum-browser:
+    build: .
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - JWT_SECRET=quantum-browser-production-secret
+    volumes:
+      - quantum_data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  quantum_data:
+    driver: local
